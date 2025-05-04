@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>crabiee's playground</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <script defer src="scripts/main.js"></script>
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <button data-tab="browser"><img src="icons/browser.svg" alt="Browser"/></button>
+      <button data-tab="games"><img src="icons/games.svg" alt="Games"/></button>
+      <button data-tab="settings"><img src="icons/settings.svg" alt="Settings"/></button>
+    </aside>
+    <main class="main-content">
+      <section id="browser-tab" class="tab active">
+        <h1>Welcome to crabiee's playground</h1>
+        <form id="search-form" onsubmit="handleSearch(event)">
+          <input type="text" id="search-input" placeholder="Search the Web..." />
+          <button type="submit"><img src="icons/search.svg" alt="Search"/></button>
+        </form>
+      </section>
+      <section id="games-tab" class="tab">No games there yet</section>
+      <section id="settings-tab" class="tab">Settings coming soon...</section>
+    </main>
+  </div>
+</body>
+</html>
