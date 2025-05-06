@@ -30,11 +30,8 @@ body {
   padding: 10px;
   border-radius: 10px;
   transition: background 0.3s;
-  /* Remove all outlines */
   outline: none;
-  /* Prevent browser default focus styles */
   -webkit-tap-highlight-color: transparent;
-  /* Prevent default focus ring in Firefox */
   -moz-focus-ring-color: transparent;
 }
 
