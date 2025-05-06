@@ -4,7 +4,7 @@ function handleSearch(event) {
   const query = document.getElementById('search-input').value;
   if (!query) return;
 
-  const proxyUrl = `http://localhost:3000/proxy?url=${encodeURIComponent('https://www.google.com/search?q=' + query)}`;
+  const proxyUrl = `${window.location.origin}/proxy?url=${encodeURIComponent('https://www.google.com/webhp?igu=1'>' + query)}`;
 
   window.open(proxyUrl, '_blank');
 }
