@@ -13,11 +13,13 @@ app.use('/icons', express.static(path.join(__dirname, 'icons')));
 
 app.get('/proxy', proxy);
 
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`crabiee's playground running on http://localhost:${PORT}`);
+  console.log(`crabiee's playground http://localhost:${PORT}`);
 });
