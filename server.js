@@ -3,7 +3,8 @@ const path = require('path');
 const app = express();
 const proxy = require('./proxy'); 
 
-app.use(express.static(__dirname));
+
+app.use(express.static('public'));
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/styles', express.static(path.join(__dirname, 'styles')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
@@ -18,5 +19,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`crabiee browser running on http://localhost:${PORT}`);
+  console.log(`crabiee's playground running on http://localhost:${PORT}`);
 });
