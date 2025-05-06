@@ -1,23 +1,46 @@
-const fetch = require('node-fetch');
+const form = document.getElementById('proxy-search-form');
+const input = document.getElementById('proxy-url-input');
+const iframe = document.getElementById('proxy-frame');
+const backBtn = document.getElementById('back-btn');
+const forwardBtn = document.getElementById('forward-btn');
 
-module.exports = async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).send('Missing URL');
+const historyStack = [];
+let currentIndex = -1;
 
-  
-  const proxyUrl = `http://152.26.229.52:9443/${url}`;  
+const proxy = 'proxy:port';
 
-  try {
-    const response = await fetch(proxyUrl);
-    const contentType = response.headers.get('content-type') || 'text/html';
-
-    
-    res.setHeader('Content-Type', contentType);
-    const data = await response.text();
-
-    
-    res.send(data);
-  } catch (err) {
-    res.status(500).send('Proxy error');
+function loadURL(url) {
+  let finalURL = url;
+  if (!/^https?:\/\//i.test(url)) {
+    finalURL = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
   }
-};
+
+  const proxied = `${proxy}/proxy?url=${encodeURIComponent(finalURL)}`;
+  iframe.src = proxied;
+
+  if (currentIndex === -1 || historyStack[currentIndex] !== finalURL) {
+    historyStack.splice(currentIndex + 1);
+    historyStack.push(finalURL);
+    currentIndex++;
+  }
+}
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const url = input.value.trim();
+  if (url) loadURL(url);
+});
+
+backBtn.addEventListener('click', () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    iframe.src = `${proxy}/proxy?url=${encodeURIComponent(historyStack[currentIndex])}`;
+  }
+});
+
+forwardBtn.addEventListener('click', () => {
+  if (currentIndex < historyStack.length - 1) {
+    currentIndex++;
+    iframe.src = `${proxy}/proxy?url=${encodeURIComponent(historyStack[currentIndex])}`;
+  }
+});
