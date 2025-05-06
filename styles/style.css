@@ -39,7 +39,6 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-
 .sidebar button:focus,
 .sidebar button:active {
   outline: none;
@@ -56,6 +55,9 @@ body {
   padding: 20px;
   backdrop-filter: blur(10px);
   overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tab {
@@ -74,6 +76,7 @@ body {
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: center;
 }
 
 #search-input {
@@ -95,7 +98,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-
 #search-form button:focus,
 #search-form button:active {
   outline: none;
@@ -107,7 +109,6 @@ body {
   height: 20px;
   filter: invert(1);
 }
-
 
 button:focus,
 button:active {
