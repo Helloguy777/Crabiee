@@ -162,8 +162,8 @@ body {
 }
 
 .nav-buttons img {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   filter: invert(1);
 }
 
@@ -179,12 +179,12 @@ body {
 
 #proxy-url-input {
   flex: 1;
-  padding: 10px 15px;
+  padding: 16px 10px;
   background: transparent;
   border: none;
   outline: none;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 #proxy-search-form button {
