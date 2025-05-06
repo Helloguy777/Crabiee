@@ -1,46 +1,47 @@
-const form = document.getElementById('proxy-search-form');
-const input = document.getElementById('proxy-url-input');
-const iframe = document.getElementById('proxy-frame');
-const backBtn = document.getElementById('back-btn');
-const forwardBtn = document.getElementById('forward-btn');
+const request = require('request');
 
-const historyStack = [];
-let currentIndex = -1;
 
-const proxy = 'proxy:port';
+const externalProxy = 'http://127.0.0.1:8080';
 
-function loadURL(url) {
-  let finalURL = url;
-  if (!/^https?:\/\//i.test(url)) {
-    finalURL = 'https://duckduckgo.com/?q=' + encodeURIComponent(url);
+module.exports = (req, res) => {
+  const targetUrl = req.query.url;
+
+  if (!targetUrl) {
+    return res.status(400).send('Missing url parameter');
   }
 
-  const proxied = `${proxy}/proxy?url=${encodeURIComponent(finalURL)}`;
-  iframe.src = proxied;
-
-  if (currentIndex === -1 || historyStack[currentIndex] !== finalURL) {
-    historyStack.splice(currentIndex + 1);
-    historyStack.push(finalURL);
-    currentIndex++;
+  
+  try {
+    new URL(targetUrl);
+  } catch (err) {
+    return res.status(400).send('Invalid URL');
   }
-}
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const url = input.value.trim();
-  if (url) loadURL(url);
-});
+  const options = {
+    url: targetUrl,
+    method: 'GET',
+    headers: {
+      'User-Agent': req.headers['user-agent'] || 'Mozilla/5.0',
+      'Accept': req.headers['accept'] || '*/*',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Accept-Language': req.headers['accept-language'] || 'en-US,en;q=0.9',
+      'Referer': targetUrl
+    },
+    followRedirect: true,
+    encoding: null,
+    proxy: externalProxy // <-- Вот здесь используется ТВОЙ прокси
+  };
 
-backBtn.addEventListener('click', () => {
-  if (currentIndex > 0) {
-    currentIndex--;
-    iframe.src = `${proxy}/proxy?url=${encodeURIComponent(historyStack[currentIndex])}`;
-  }
-});
-
-forwardBtn.addEventListener('click', () => {
-  if (currentIndex < historyStack.length - 1) {
-    currentIndex++;
-    iframe.src = `${proxy}/proxy?url=${encodeURIComponent(historyStack[currentIndex])}`;
-  }
-});
+  request(options)
+    .on('response', (response) => {
+      Object.keys(response.headers).forEach(header => {
+        res.setHeader(header, response.headers[header]);
+      });
+      res.status(response.statusCode);
+    })
+    .on('error', (err) => {
+      console.error('Proxy error:', err.message);
+      res.status(500).send('Error fetching URL');
+    })
+    .pipe(res);
+};
